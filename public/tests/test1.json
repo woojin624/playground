@@ -1,0 +1,79 @@
+{
+  "title": "테토/에겐 유형 테스트",
+  "questions": [
+    {
+      "question": "당신의 성별을 선택해 주세요.",
+      "answers": [
+        { "type": "male", "text": "남자" },
+        { "type": "female", "text": "여자" }
+      ]
+    },
+    {
+      "question": "약속 시간에 보통 어떻게 도착하나요?",
+      "answers": [
+        { "type": "teto", "text": "항상 5~10분 일찍 도착한다" },
+        { "type": "egen", "text": "항상 딱 맞춰서 도착한다" }
+      ]
+    },
+    {
+      "question": "여행 계획을 어떻게 세우나요?",
+      "answers": [
+        { "type": "teto", "text": "계획표를 꼼꼼히 짠다" },
+        { "type": "egen", "text": "즉흥적으로 움직인다" }
+      ]
+    },
+    {
+      "question": "친구와의 약속이 취소되면?",
+      "answers": [
+        { "type": "teto", "text": "미리 알림을 받고 싶다" },
+        { "type": "egen", "text": "당일에 알려줘도 괜찮다" }
+      ]
+    },
+    {
+      "question": "카페에서 자리를 고를 때?",
+      "answers": [
+        { "type": "teto", "text": "미리 자리를 예약한다" },
+        { "type": "egen", "text": "그때그때 빈 자리에 앉는다" }
+      ]
+    },
+    {
+      "question": "주말 계획은?",
+      "answers": [
+        { "type": "teto", "text": "미리 계획을 세워둔다" },
+        { "type": "egen", "text": "그날 기분에 따라 정한다" }
+      ]
+    },
+    {
+      "question": "새로운 일을 시작할 때?",
+      "answers": [
+        { "type": "teto", "text": "충분히 준비하고 시작한다" },
+        { "type": "egen", "text": "일단 시작하고 본다" }
+      ]
+    },
+    {
+      "question": "모임에서 대화를 이끌 때?",
+      "answers": [
+        { "type": "teto", "text": "주제를 미리 생각해둔다" },
+        { "type": "egen", "text": "즉흥적으로 대화한다" }
+      ]
+    }
+  ],
+  "results": {
+    "teto_male": {
+      "label": "테토남",
+      "description": "항상 미리 준비하고 약속을 잘 지키는 남자!"
+    },
+    "egen_male": {
+      "label": "에겐남",
+      "description": "자유롭고 즉흥적인 매력의 남자!"
+    },
+    "teto_female": {
+      "label": "테토녀",
+      "description": "계획적이고 신뢰감 있는 여자!"
+    },
+    "egen_female": {
+      "label": "에겐녀",
+      "description": "유연하고 긍정적인 에너지의 여자!"
+    }
+  }
+}

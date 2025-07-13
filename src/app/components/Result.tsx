@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { getScaleIn, getFadeIn } from "../motion/motionPresets";
+import type { Result } from "@/types/test";
 
 /**
  * 결과(Result) 컴포넌트

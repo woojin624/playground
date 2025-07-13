@@ -1,13 +1,10 @@
 "use client";
 
-import { tests } from "../../data/tests";
-import { useState, use } from "react";
+import { use } from "react";
+import { useTest } from "@/queries/useTest";
+import { useState } from "react";
 import Question from "../components/Question";
 import Result from "../components/Result";
-
-interface Params {
-  params: Promise<{ testId: string }>;
-}
 
 /**
  * 개별 심리 테스트 페이지
@@ -15,15 +12,22 @@ interface Params {
  * - 잘못된 testId 처리, 테스트 재시작 기능 포함
  */
 
-export default function TestPage({ params }: Params) {
-  const { testId } = use(params);
-  const test = tests[testId as keyof typeof tests];
+export default function TestPage({ params }: { params: Promise<{ testId: string }> }) {
+  const { testId } = use(params); // ✅ 이렇게 언래핑
+  const { data: test, error, isLoading } = useTest(testId);
   type ResultKey = "teto_male" | "egen_male" | "teto_female" | "egen_female";
   const [step, setStep] = useState(0);
   const [gender, setGender] = useState<string | null>(null);
   const [answers, setAnswers] = useState<string[]>([]);
 
-  if (!test) {
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-2xl font-bold text-red-600 mb-4">로딩 중...</h1>
+      </div>
+    );
+  }
+  if (error || !test) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <h1 className="text-2xl font-bold text-red-600 mb-4">존재하지 않는 테스트입니다.</h1>

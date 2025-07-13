@@ -2,11 +2,7 @@
 
 import { motion } from "framer-motion";
 import { getFadeInUp, getFadeIn, getFadeInLeft, getFadeInRight } from "../motion/motionPresets";
-
-interface Answer {
-  type: string;
-  text: string;
-}
+import type { Question, Answer } from "@/types/test";
 
 interface QuestionProps {
   question: string;

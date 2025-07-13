@@ -1,7 +1,7 @@
 "use client";
 
-import { tests } from "../data/tests";
 import { motion } from "framer-motion";
+import { useTestList } from "@/queries/useTestList";
 import Link from "next/link";
 import { getFadeInUp, getFadeIn } from "./motion/motionPresets";
 
@@ -11,6 +11,15 @@ import { getFadeInUp, getFadeIn } from "./motion/motionPresets";
  * - motionPresets를 활용한 애니메이션 적용
  */
 export default function Home() {
+  const { data: testList, isLoading, error } = useTestList();
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+  if (error || !testList) {
+    return <div>테스트 목록을 불러올 수 없습니다.</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="container mx-auto px-4 py-16">
@@ -22,18 +31,17 @@ export default function Home() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {Object.entries(tests).map(([testId, test], index) => (
+          {testList.map((test: { id: string; title: string; questions: { length: number } }, index: number) => (
             <motion.div
-              key={testId}
+              key={test.id}
               {...getFadeInUp(index * 0.1)}
               whileHover={{ y: -5 }}
               className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
               <div className="p-6">
                 <h2 className="text-xl font-bold text-gray-800 mb-3">{test.title}</h2>
-                <p className="text-gray-600 mb-4">{test.questions.length}개의 질문으로 구성된 테스트입니다.</p>
                 <div className="flex justify-end items-center">
-                  <Link href={`/${testId}`} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">
+                  <Link href={`/${test.id}`} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200">
                     테스트 시작
                   </Link>
                 </div>
