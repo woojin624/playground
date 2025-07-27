@@ -33,5 +33,6 @@ export interface Answer {
 /** 결과 */
 export interface Result {
   title: string; // 결과 타이틀
-  description: string; // 결과 설명
+  description?: string; // 결과 설명
+  image?: string; // 이미지 경로 (옵션)
 }

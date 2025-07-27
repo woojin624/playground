@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { getScaleIn, getFadeIn } from "../motion/motionPresets";
 import type { Result as ResultType } from "@/types/test";
+import Image from "next/image";
 
 /**
  * 결과(Result) 컴포넌트
@@ -24,17 +25,30 @@ interface ResultProps {
 
 export default function Result({ result, onRestart }: ResultProps) {
   return (
-    <motion.div {...getScaleIn()} className="flex flex-col items-center justify-center min-h-screen px-4">
+    <motion.div {...getScaleIn()} className="flex flex-col items-center justify-center min-h-screen px-4 bg-blue-50">
       {/* Result Card */}
       <motion.div {...getFadeIn(0.2)} className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
-        <motion.h2 {...getFadeIn(0.4)} className="text-2xl font-bold mb-6 text-gray-800">
+        <motion.h2 {...getFadeIn(0.4)} className="text-2xl font-bold mb-4 text-gray-800">
           {result.title}
         </motion.h2>
 
+        {result.image && (
+          <Image
+            src={result.image}
+            alt={result.title}
+            width={0} // 자동 너비
+            height={400} // 최대 높이 400
+            sizes="100vw"
+            style={{ width: "auto", maxHeight: 400, objectFit: "contain" }}
+            className="mx-auto mb-4"
+            priority
+          />
+        )}
+
         {/* 설명 영역: description이 있을 때만 렌더링 */}
         {result.description && (
-          <motion.div {...getFadeIn(0.6)} className="mb-6">
-            <p className="text-lg text-gray-700 leading-relaxed">{result.description}</p>
+          <motion.div {...getFadeIn(0.6)} className="mb-8">
+            <p className="text-sm text-gray-700 leading-relaxed">{result.description}</p>
           </motion.div>
         )}
 
