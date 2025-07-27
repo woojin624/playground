@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { getScaleIn, getFadeIn } from "../motion/motionPresets";
-import type { Result } from "@/types/test";
+import type { Result as ResultType } from "@/types/test";
 
 /**
  * 결과(Result) 컴포넌트
@@ -10,14 +10,14 @@ import type { Result } from "@/types/test";
  */
 
 interface ResultProps {
-  result: string;
+  result: ResultType;
   onRestart: () => void;
 }
 
 /**
  * Result 컴포넌트
  * @param {Object} props
- * @param {string} props.result - 결과 텍스트
+ * @param {ResultType} props.result - 결과 객체 (타이틀+설명)
  * @param {function} props.onRestart - 테스트 재시작 함수
  * @returns {JSX.Element} 결과 UI
  */
@@ -28,12 +28,15 @@ export default function Result({ result, onRestart }: ResultProps) {
       {/* Result Card */}
       <motion.div {...getFadeIn(0.2)} className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
         <motion.h2 {...getFadeIn(0.4)} className="text-2xl font-bold mb-6 text-gray-800">
-          테스트 결과
+          {result.title}
         </motion.h2>
 
-        <motion.div {...getFadeIn(0.6)} className="mb-6">
-          <p className="text-lg text-gray-700 leading-relaxed">{result}</p>
-        </motion.div>
+        {/* 설명 영역: description이 있을 때만 렌더링 */}
+        {result.description && (
+          <motion.div {...getFadeIn(0.6)} className="mb-6">
+            <p className="text-lg text-gray-700 leading-relaxed">{result.description}</p>
+          </motion.div>
+        )}
 
         {/* Restart Button */}
         <motion.button

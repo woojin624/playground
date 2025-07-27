@@ -15,10 +15,10 @@ import Result from "../components/Result";
 export default function TestPage({ params }: { params: Promise<{ testId: string }> }) {
   const { testId } = use(params); // ✅ 이렇게 언래핑
   const { data: test, error, isLoading } = useTest(testId);
-  type ResultKey = "teto_male" | "egen_male" | "teto_female" | "egen_female";
+  // 분석 축별 점수 누적용 state
+  const [scores, setScores] = useState<Record<string, Record<string, number>>>({});
   const [step, setStep] = useState(0);
-  const [gender, setGender] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<string[]>([]);
+  // 기존 gender/answers state 제거
 
   if (isLoading) {
     return (
@@ -36,35 +36,49 @@ export default function TestPage({ params }: { params: Promise<{ testId: string 
     );
   }
 
-  const handleAnswer = (type: string) => {
-    if (step === 0) {
-      setGender(type); // 첫 번째 질문은 성별
-    } else {
-      setAnswers([...answers, type]);
-    }
+  // 답변 effects를 받아서 점수 누적
+  const handleAnswer = (effects: Record<string, string>) => {
+    // 새로운 점수 객체 복사
+    const newScores = { ...scores };
+    // 각 축별로 점수 누적
+    Object.entries(effects).forEach(([dimension, value]) => {
+      if (!newScores[dimension]) newScores[dimension] = {};
+      if (!newScores[dimension][value]) newScores[dimension][value] = 0;
+      newScores[dimension][value] += 1;
+    });
+    setScores(newScores);
     setStep(step + 1);
   };
 
+  // 테스트 재시작
   const handleRestart = () => {
     setStep(0);
-    setGender(null);
-    setAnswers([]);
+    setScores({});
   };
 
   if (step >= test.questions.length) {
-    // 결과 계산: gender + (테토/에겐 카운트)
-    const tetoCount = answers.filter((a) => a === "teto").length;
-    const egenCount = answers.filter((a) => a === "egen").length;
-    let resultKey: ResultKey = "teto_male";
-    if (gender === "male" || gender === "female") {
-      if (tetoCount >= egenCount) {
-        resultKey = `teto_${gender}` as ResultKey;
-      } else {
-        resultKey = `egen_${gender}` as ResultKey;
-      }
+    // 결과 분석: 각 축별로 점수 높은 값을 조합
+    let resultKey = "";
+    if (test.dimensions && test.dimensions.length > 0) {
+      resultKey = test.dimensions
+        .map((dimension: string) => {
+          const values = scores[dimension] || {};
+          // 가장 점수 높은 값 찾기
+          let maxValue = "";
+          let maxScore = -1;
+          Object.entries(values).forEach(([value, score]) => {
+            if (score > maxScore) {
+              maxScore = score;
+              maxValue = value;
+            }
+          });
+          return maxValue;
+        })
+        .join("");
     }
-    const result = test.results[resultKey];
-    return <Result result={result.label + " - " + result.description} onRestart={handleRestart} />;
+    // 결과가 없으면 기타로 처리
+    const result = test.results[resultKey] || test.results["기타"] || { title: "결과를 찾을 수 없습니다.", description: "" };
+    return <Result result={result} onRestart={handleRestart} />;
   }
 
   const currentQuestion = test.questions[step];

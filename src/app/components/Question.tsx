@@ -7,7 +7,7 @@ import type { Question, Answer } from "@/types/test";
 interface QuestionProps {
   question: string;
   answers: Answer[];
-  onAnswer: (type: string) => void;
+  onAnswer: (effects: Record<string, string>) => void; // 답변 효과를 넘김
   currentStep: number;
   totalSteps: number;
 }
@@ -57,11 +57,11 @@ export default function Question({ question, answers, onAnswer, currentStep, tot
       <div className="flex flex-col gap-4 w-full max-w-md">
         {answers.map((answer, index) => (
           <motion.button
-            key={answer.type}
+            key={answer.text}
             {...(index === 0 ? getFadeInLeft(0.3) : getFadeInRight(0.4))}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => onAnswer(answer.type)}
+            onClick={() => onAnswer(answer.effects)} // effects를 넘김
             className="px-6 py-4 bg-white border-2 border-blue-500 text-blue-600 rounded-lg hover:bg-blue-500 hover:text-white transition-all duration-200 shadow-md hover:shadow-lg"
           >
             {answer.text}

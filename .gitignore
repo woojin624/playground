@@ -42,3 +42,6 @@ next-env.d.ts
 
 # test data
 src/data/tests.ts
+public/tests
+
+.cursor
